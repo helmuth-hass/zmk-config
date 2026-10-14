@@ -32,7 +32,47 @@
  */
 
 / {
+        macros {
+                // Envia o acento agudo (tecla morta ´) seguido da vogal recebida como parâmetro.
+                acute_macro: acute_macro {
+                        compatible = "zmk,behavior-macro-one-param";
+                        label = "ACUTE_MACRO";
+                        #binding-cells = <1>;
+                        bindings = <&macro_tap &kp LBKT &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+                };
+
+                // Envia o til (tecla morta ~) seguido da vogal recebida como parâmetro.
+                tilde_macro: tilde_macro {
+                        compatible = "zmk,behavior-macro-one-param";
+                        label = "TILDE_MACRO";
+                        #binding-cells = <1>;
+                        bindings = <&macro_tap &kp SQT &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+                };
+        };
+
         behaviors {
+                // Toque: vogal. Segurar: vogal com acento agudo (é í ó ú).
+                // Uso: &acute_ht <vogal> <vogal>
+                acute_ht: acute_ht {
+                        compatible = "zmk,behavior-hold-tap";
+                        label = "ACUTE_HT";
+                        #binding-cells = <2>;
+                        flavor = "tap-preferred";
+                        tapping-term-ms = <200>;
+                        bindings = <&acute_macro>, <&kp>;
+                };
+
+                // Toque: vogal. Segurar: vogal com til (ã).
+                // Uso: &tilde_ht <vogal> <vogal>
+                tilde_ht: tilde_ht {
+                        compatible = "zmk,behavior-hold-tap";
+                        label = "TILDE_HT";
+                        #binding-cells = <2>;
+                        flavor = "tap-preferred";
+                        tapping-term-ms = <200>;
+                        bindings = <&tilde_macro>, <&kp>;
+                };
+
                 // Toque: C. Segurar: ç (tecla ";" do US = ç no ABNT2).
                 // Uso: &cedilla <segurar> <toque>
                 cedilla: cedilla {
@@ -51,13 +91,13 @@
                 default_layer {
                         display-name = "0";
 // -----------------------------------------------------------------------------------------
-// |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BSPC |
-// | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
+// |  TAB |  Q  |  W  | E/é |  R  |  T  |   |  Y  | U/ú  | I/í | O/ó |  P  | BSPC |
+// | CTRL | A/ã |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
 // | SHFT |  Z  |  X  | C/ç |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
 //                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
                         bindings = <
-   &kp TAB   &kp Q &kp W &kp E          &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSPC
-   &kp LCTRL &kp A &kp S &kp D          &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp FSLH &kp GRAVE
+   &kp TAB   &kp Q &kp W &acute_ht E E  &kp R &kp T   &kp Y &acute_ht U U &acute_ht I I &acute_ht O O &kp P    &kp BSPC
+   &kp LCTRL &tilde_ht A A &kp S &kp D  &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp FSLH &kp GRAVE
    &kp LSHFT &kp Z &kp X &cedilla SEMI C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp RA(Q) &kp ESC
                   &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
                         >;
