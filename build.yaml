@@ -19,7 +19,7 @@
 #
 ---
 include:
-  - board: nrfmicro/nrf52840/flipped_zmk@1.1
+  - board: nrfmicro@1.1/nrf52840/flipped_zmk
     shield: corne_left
-  - board: nrfmicro/nrf52840/flipped_zmk@1.1
+  - board: nrfmicro@1.1/nrf52840/flipped_zmk
     shield: corne_right
